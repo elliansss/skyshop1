@@ -72,8 +72,8 @@ public class StorageService {
         articleStorage.put(article.getId(), article);
     }
 
-    public Product getProductById(UUID id) {
-        return productStorage.get(id);
+    public Optional<Product> getProductById(UUID id) {
+        return Optional.ofNullable(productStorage.get(id));
     }
 
     public Article getArticleById(UUID id) {
@@ -86,4 +86,5 @@ public class StorageService {
         searchables.addAll((Collection<? extends Searchable>) articleStorage.values());
         return searchables;
     }
+
 }
