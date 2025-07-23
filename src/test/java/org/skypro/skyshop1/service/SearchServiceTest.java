@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.skypro.skyshop1.model.product.Product;
 import org.skypro.skyshop1.model.search.SearchResult;
 import org.skypro.skyshop1.model.search.Searchable;
 
@@ -36,8 +37,8 @@ public class SearchServiceTest {
 
     @Test
     public void testSearch_ObjectsExistButNoneMatch() {
-        Searchable searchable1 = createMockSearchable("Product A", UUID.randomUUID());
-        Searchable searchable2 = createMockSearchable("Product B", UUID.randomUUID());
+        Searchable searchable1 = createMockProduct("Product A", UUID.randomUUID());
+        Searchable searchable2 = createMockProduct("Product B", UUID.randomUUID());
         when(storageService.getAllSearchable()).thenReturn(List.of(searchable1, searchable2));
 
         Collection<SearchResult> results = searchService.search("nonexistent");
@@ -49,8 +50,8 @@ public class SearchServiceTest {
     public void testSearch_MatchingObjectExists() {
 
         UUID id = UUID.randomUUID();
-        Searchable searchable1 = createMockSearchable("Test Product", id);
-        Searchable searchable2 = createMockSearchable("Another Product", UUID.randomUUID());
+        Searchable searchable1 = createMockProduct("Test Product", id);
+        Searchable searchable2 = createMockProduct("Another Product", UUID.randomUUID());
         when(storageService.getAllSearchable()).thenReturn(List.of(searchable1, searchable2));
 
         Collection<SearchResult> results = searchService.search("test");
@@ -65,7 +66,7 @@ public class SearchServiceTest {
     public void testSearch_CaseInsensitiveSearch() {
 
         UUID id = UUID.randomUUID();
-        Searchable searchable = createMockSearchable("Test Product", id);
+        Searchable searchable = createMockProduct("Test Product", id);
         when(storageService.getAllSearchable()).thenReturn(Collections.singletonList(searchable));
 
 
@@ -73,28 +74,18 @@ public class SearchServiceTest {
 
         assertEquals(1, results.size());
     }
-
-    private Searchable createMockSearchable(String name, UUID id) {
-        return new Searchable() {
-            @Override
-            public String getName() {
-                return name;
-            }
-
-            @Override
-            public String getSearchTerm() {
-                return name;
-            }
-
-            @Override
-            public UUID getId() {
-                return id;
-            }
-
+    private Product createMockProduct(String name, UUID id) {
+        Product product = new Product(name, 100, true, id) {
             @Override
             public String getContentType() {
-                return "TEST";
+                return "PRODUCT";
+            }
+
+            @Override
+            public String toString() {
+                return "";
             }
         };
+        return product;
     }
 }
