@@ -1,5 +1,6 @@
 package org.skypro.skyshop1.controller;
 
+import org.skypro.skyshop1.exception.NoSuchProductException;
 import org.skypro.skyshop1.model.article.Article;
 import org.skypro.skyshop1.model.product.Product;
 import org.skypro.skyshop1.model.search.SearchResult;
@@ -49,7 +50,7 @@ public class ShopController {
         try {
             basketService.addProductToBasket(id);
             return "Продукт успешно добавлен ";
-        } catch (IllegalArgumentException e) {
+        } catch (NoSuchProductException e) {
             return "Ошибка " + e.getMessage();
         }
     }
